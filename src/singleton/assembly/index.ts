@@ -1,53 +1,26 @@
-import { storage, Context } from "near-sdk-core"
+import { logging } from "near-sdk-core";
 
 @nearBindgen
 export class Contract {
-  private message: string = 'hello world'
+  loop(): void {
+    // for loop
+    for (let i: i32 = 0; i < 10; i++) {
+      logging.log("current i value is:" + i.toString());
+      if (i == 3) {
+        // Skip to next iteration with continue
+        continue;
+      }
+      if (i == 5) {
+        // Exit loop with break
+        break;
+      }
+    }
 
-  // return the string 'hello world'
-  helloWorld(): string {
-    return this.message
-  }
-
-  // read the given key from account (contract) storage
-  read(key: string): string {
-    if (isKeyInStorage(key)) {
-      return `✅ Key [ ${key} ] has value [ ${storage.getString(key)!} ]`
-    } else {
-      return `🚫 Key [ ${key} ] not found in storage. ( ${this.storageReport()} )`
+    // while loop
+    let j: i32 = 0;
+    while (j < 10) {
+      logging.log("current j value is:" + j.toString());
+      j++;
     }
   }
-
-  // write the given value at the given key to account (contract) storage
-  @mutateState()
-  write(key: string, value: string): string {
-    storage.set(key, value)
-    return `✅ Data saved. ( ${this.storageReport()} )`
-  }
-
-  // private helper method used by read() and write() above
-  private storageReport(): string {
-    return `storage [ ${Context.storageUsage} bytes ]`
-  }
-}
-
-/**
- * This function exists only to avoid a compiler error
- *
-
-ERROR TS2339: Property 'contains' does not exist on type 'src/singleton/assembly/index/Contract'.
-
-     return this.contains(key);
-                 ~~~~~~~~
- in ~lib/near-sdk-core/storage.ts(119,17)
-
-/Users/sherif/Documents/code/near/_projects/edu.t3/starter--near-sdk-as/node_modules/asbuild/dist/main.js:6
-        throw err;
-        ^
-
- * @param key string key in account storage
- * @returns boolean indicating whether key exists
- */
-function isKeyInStorage(key: string): bool {
-  return storage.hasKey(key)
 }
