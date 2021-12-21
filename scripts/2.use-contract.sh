@@ -16,17 +16,10 @@ echo
 echo
 echo ---------------------------------------------------------
 echo "Step 1: Call 'view' functions on the contract"
-echo
-echo "(run this script again to see changes made by this file)"
 echo ---------------------------------------------------------
 echo
 
-near view $CONTRACT helloWorld
-
-echo
-echo
-
-near view $CONTRACT read '{"key":"some-key"}'
+near view $CONTRACT  getCounter
 
 echo
 echo
@@ -34,12 +27,25 @@ echo ---------------------------------------------------------
 echo "Step 2: Call 'change' functions on the contract"
 echo ---------------------------------------------------------
 echo
+echo "run the function to increment counter by 1"
 
-# the following line fails with an error because we can't write to storage without signing the message
-# --> FunctionCallError(HostError(ProhibitedInView { method_name: "storage_write" }))
-# near view $CONTRACT write '{"key": "some-key", "value":"some value"}'
-near call $CONTRACT write '{"key": "some-key", "value":"some value"}' --accountId $CONTRACT
+near call  $CONTRACT incrementCounter '{"value":1}' --account_id $CONTRACT
 
 echo
-echo "now run this script again to see changes made by this file"
+echo "now run the function to decrement counter by 1"
+echo
+echo
+
+near call  $CONTRACT decrementCounter '{"value":1}' --account_id $CONTRACT
+
+echo
+echo "now run the function to reset the counter"
+echo
+echo
+
+near call $CONTRACT resetCounter --account_id $CONTRACT
+
+echo
+echo
+
 exit 0

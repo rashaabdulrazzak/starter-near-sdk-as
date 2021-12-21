@@ -1,26 +1,22 @@
-import { storage, Context } from "near-sdk-as"
+import { storage, logging } from "near-sdk-as";
 
-// return the string 'hello world'
-export function helloWorld(): string {
-  return 'hello world'
+export function incrementCounter(value: i32): void {
+  const newCounter = storage.getPrimitive<i32>("counter", 0) + value;
+  storage.set<i32>("counter", newCounter);
+  logging.log("Counter is now: " + newCounter.toString());
 }
 
-// read the given key from account (contract) storage
-export function read(key: string): string {
-  if (storage.hasKey(key)) {
-    return `✅ Key [ ${key} ] has value [ ${storage.getString(key)!} ]`
-  } else {
-    return `🚫 Key [ ${key} ] not found in storage. ( ${storageReport()} )`
-  }
+export function decrementCounter(value: i32): void {
+  const newCounter = storage.getPrimitive<i32>("counter", 0) - value;
+  storage.set<i32>("counter", newCounter);
+  logging.log("Counter is now: " + newCounter.toString());
 }
 
-// write the given value at the given key to account (contract) storage
-export function write(key: string, value: string): string {
-  storage.set(key, value)
-  return `✅ Data saved. ( ${storageReport()} )`
+export function getCounter(): i32 {
+  return storage.getPrimitive<i32>("counter", 0);
 }
 
-// private helper method used by read() and write() above
-function storageReport(): string {
-  return `storage [ ${Context.storageUsage} bytes ]`
+export function resetCounter(): void {
+  storage.set<i32>("counter", 0);
+  logging.log("Counter is reset!");
 }

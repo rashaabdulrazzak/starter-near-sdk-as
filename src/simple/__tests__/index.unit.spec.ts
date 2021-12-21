@@ -3,17 +3,24 @@ import * as contract from "../assembly";
 describe("Contract", () => {
   // VIEW method tests
 
-  it("says hello", () => {
-    expect(contract.helloWorld()).toStrictEqual("hello world")
+  it("get counter value", () => {
+    expect(contract.getCounter()).toStrictEqual(0)
   })
 
-  it("reads data", () => {
-    expect(contract.read("some key")).toStrictEqual("🚫 Key [ some key ] not found in storage. ( storage [ 0 bytes ] )")
+   // CHANGE method tests
+
+  it("increment counter by one", () => {
+    contract.incrementCounter(1)
+    expect(contract.getCounter()).toStrictEqual(1)
+  })
+  
+  it("decrement counter by one", () => {
+    contract.decrementCounter(1)
+    expect(contract.getCounter()).toStrictEqual(-1)
   })
 
-  // CHANGE method tests
-
-  it("saves data to contract storage", () => {
-    expect(contract.write("some-key", "some value")).toStrictEqual("✅ Data saved. ( storage [ 18 bytes ] )")
+  it("resets counter to zero", () => {
+    contract.resetCounter()
+    expect(contract.getCounter()).toStrictEqual(0)
   })
 })

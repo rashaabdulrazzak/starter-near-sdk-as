@@ -1,53 +1,30 @@
-import { storage, Context } from "near-sdk-core"
+import { storage, logging } from "near-sdk-core"
 
 @nearBindgen
 export class Contract {
-  private message: string = 'hello world'
-
-  // return the string 'hello world'
-  helloWorld(): string {
-    return this.message
+  // Function to increment the counter by value
+  incrementCounter(value: i32): void {
+    const newCounter = storage.getPrimitive<i32>("counter", 0) + value;
+    storage.set<i32>("counter", newCounter);
+    logging.log("Counter is now: " + newCounter.toString());
   }
 
-  // read the given key from account (contract) storage
-  read(key: string): string {
-    if (isKeyInStorage(key)) {
-      return `✅ Key [ ${key} ] has value [ ${storage.getString(key)!} ]`
-    } else {
-      return `🚫 Key [ ${key} ] not found in storage. ( ${this.storageReport()} )`
-    }
+  // Function to decrement the counter by value
+  decrementCounter(value: i32): void {
+    const newCounter = storage.getPrimitive<i32>("counter", 0) - value;
+    storage.set<i32>("counter", newCounter);
+    logging.log("Counter is now: " + newCounter.toString());
   }
 
-  // write the given value at the given key to account (contract) storage
-  @mutateState()
-  write(key: string, value: string): string {
-    storage.set(key, value)
-    return `✅ Data saved. ( ${this.storageReport()} )`
+  // Function to get the current counter value 
+  getCounter(): i32 {
+    return storage.getPrimitive<i32>("counter", 0);
   }
 
-  // private helper method used by read() and write() above
-  private storageReport(): string {
-    return `storage [ ${Context.storageUsage} bytes ]`
+  // Function to reset the counter to zero
+  resetCounter(): void {
+    storage.set<i32>("counter", 0);
+    logging.log("Counter is reset!");
   }
 }
 
-/**
- * This function exists only to avoid a compiler error
- *
-
-ERROR TS2339: Property 'contains' does not exist on type 'src/singleton/assembly/index/Contract'.
-
-     return this.contains(key);
-                 ~~~~~~~~
- in ~lib/near-sdk-core/storage.ts(119,17)
-
-/Users/sherif/Documents/code/near/_projects/edu.t3/starter--near-sdk-as/node_modules/asbuild/dist/main.js:6
-        throw err;
-        ^
-
- * @param key string key in account storage
- * @returns boolean indicating whether key exists
- */
-function isKeyInStorage(key: string): bool {
-  return storage.hasKey(key)
-}
