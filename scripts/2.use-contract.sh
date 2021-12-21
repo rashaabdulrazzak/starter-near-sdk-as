@@ -20,7 +20,7 @@ echo
 echo ---------------------------------------------------------
 echo
 
-near call  $CONTRACT  convertToYocto '{"amount": 7}' --account_id $CONTRACT 
+near call  $CONTRACT  convertToNear '{"amount":"7000000000000000000000000"}' --account_id $CONTRACT 
 
 echo
 echo 

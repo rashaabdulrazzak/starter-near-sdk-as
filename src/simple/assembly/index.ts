@@ -4,12 +4,12 @@ import { u128 } from "near-sdk-as"
 export const ONE_NEAR =  u128.from("1000000000000000000000000");
 
 /**
- * 
- * @param amount integer
- * @returns amount in yocto Ⓝ as an unsigned 128-bit integer
+ * function convertToNear
+ * @param amount {u128} - Yocto Ⓝ token quantity as an unsigned 128-bit integer
+ * @returns {string}    - Amount in NEAR, as a string
  */
  
-export function convertToYocto(amount: i32): u128 {    
-  return u128.mul(ONE_NEAR, u128.from(amount))
+ export function convertToNear(amount: u128): string {
+  return u128.div(amount, ONE_NEAR).toString();
 }
 
