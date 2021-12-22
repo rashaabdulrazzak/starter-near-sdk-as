@@ -2,13 +2,6 @@ import { storage, Context } from "near-sdk-core"
 
 @nearBindgen
 export class Contract {
-  private message: string = 'hello world'
-
-  // return the string 'hello world'
-  helloWorld(): string {
-    return this.message
-  }
-
   // read the given key from account (contract) storage
   read(key: string): string {
     if (isKeyInStorage(key)) {
